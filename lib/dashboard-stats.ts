@@ -41,6 +41,30 @@ export function getDashboardStats(files: CsvFile[]) {
       ? values.reduce((sum, value) => sum + value, 0) / values.length
       : null;
 
+  const isRechargeable = (value: unknown): boolean => {
+    if (typeof value === "boolean") return value;
+
+    const normalized = String(value ?? "").trim().toLowerCase();
+
+    return ["oui", "yes", "true", "1"].includes(normalized);
+  };
+
+  const isNonRechargeable = (value: unknown): boolean => {
+    if (typeof value === "boolean") return !value;
+
+    const normalized = String(value ?? "").trim().toLowerCase();
+
+    return ["non", "no", "false", "0"].includes(normalized);
+  };
+
+  const rechargeableProducts = products.filter((product) =>
+    isRechargeable(product.top_up)
+  ).length;
+
+  const nonRechargeableProducts = products.filter((product) =>
+    isNonRechargeable(product.top_up)
+  ).length;
+
   return {
     totalProducts: products.length,
 
@@ -71,14 +95,7 @@ export function getDashboardStats(files: CsvFile[]) {
       {}
     ),
 
-    rechargeableProducts: products.filter(
-    (product) =>
-      String(product.top_up).trim().toLowerCase() === "oui"
-    ).length,
-
-    nonRechargeableProducts: products.filter(
-    (product) =>
-      String(product.top_up).trim().toLowerCase() === "non"
-    ).length,
+    rechargeableProducts,
+    nonRechargeableProducts,
   };
 }

@@ -10,5 +10,10 @@ export type Product = {
   price: number;
   currency: string;
   network: string;
-  top_up: boolean;
+  top_up: string | boolean;
+};
+
+export type CsvFile = {
+  file: string;
+  products: Product[];
 };

@@ -134,21 +134,22 @@ export default function DashboardPage() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/products", {
-        cache: "no-store",
-      });
+      const response = await fetch("/api/products");
+      const data: unknown = await response.json();
 
       if (!response.ok) {
-        throw new Error("Impossible de récupérer les statistiques.");
+        const message =
+          data !== null &&
+          typeof data === "object" &&
+          "error" in data &&
+          typeof data.error === "string"
+            ? data.error
+            : "Impossible de charger les statistiques.";
+
+        throw new Error(message);
       }
 
-      const data: DashboardStats = await response.json();
-
-      if (data.error) {
-        throw new Error("Le calcul des statistiques a échoué.");
-      }
-
-      setStats(data);
+      setStats(data as DashboardStats);
     } catch (err) {
       setError(
         err instanceof Error

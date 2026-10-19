@@ -577,8 +577,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <p className="mt-4 text-xs leading-5 text-slate-500">
-                  Ces indicateurs dépendent des valeurs « oui » et « non »
-                  présentes dans la colonne top_up.
+                  Part des forfaits qui sont rechargeable ou non
                 </p>
               </Panel>
 
